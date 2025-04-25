@@ -29,7 +29,7 @@ def login():
     login_form = LoginForm()
     
     if login_form.validate_on_submit():
-        flash( message=f"Login requested for user: {login_form.username.data}, rememeber_me={login_form.remember_me.data}" )
+        flash( message=f"Login requested for user: {login_form.username.data}, remember_me={login_form.remember_me.data}" )
         
         print(login_form.username)
         print(login_form.password)
