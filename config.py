@@ -8,5 +8,5 @@ class Config:
     
     # database configuration
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATATBASE_URL') or \
-        'sqllite:///' + os.path.join(basedir, 'app.db')
+        'sqlite:///' + os.path.join(basedir, 'app.db')
     
