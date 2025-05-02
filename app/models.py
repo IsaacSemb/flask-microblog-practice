@@ -16,6 +16,12 @@ class User(db.Model):
     def __repr__(self):
         return f"<User {self.username}>"
     
+    def set_password(self):
+        pass
+    
+    def check_password(self):
+        pass
+    
 class Post(db.Model):
     id : so.Mapped[int] = so.mapped_column(primary_key=True)
     body : so.Mapped[str] = so.mapped_column(sa.String(140))
