@@ -2,14 +2,18 @@ from flask import render_template, flash, redirect, url_for
 from app import app, db
 from app.forms import LoginForm
 
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_required, login_user, logout_user
 from app.models import User
 import sqlalchemy as sa
 
 
+# to protect a view from people who arent logged in 
+# you use the login required decorator
+#  @login_required below the route decorator
 
 @app.route('/')
 @app.route('/index')
+@login_required
 def index():
     context1 = {
         "username":"Isaac Ssembuusi",
