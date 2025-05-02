@@ -1,4 +1,5 @@
-from flask import render_template, flash, redirect, url_for
+from urllib.parse import urlsplit
+from flask import render_template, flash, redirect, request, url_for
 from app import app, db
 from app.forms import LoginForm
 
@@ -61,6 +62,12 @@ def login():
         # if sucessfull if statement wont run
         login_user(user, remember=login_form.remember_me.data)
         
+        # Incase the user came from a formerly requested page, we want to send them back 
+        # basically the applcation being smart
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('index')
+            
         # send the user to the homepage
         return redirect(url_for('index'))
     
