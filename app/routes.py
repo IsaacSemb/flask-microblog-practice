@@ -16,23 +16,7 @@ import sqlalchemy as sa
 @app.route('/index')
 @login_required
 def index():
-    context1 = {
-        "username":"Isaac Ssembuusi",
-        "title": "Home Page"
-        }
-    
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
-    
-    return render_template( 'index.html', **context1, posts=posts )
+    return render_template( 'index.html', title='Home Page', posts='posts' )
 
 @app.route('/login', methods=[ 'GET', 'POST' ])
 def login():
