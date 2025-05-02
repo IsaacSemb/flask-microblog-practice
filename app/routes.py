@@ -2,7 +2,7 @@ from flask import render_template, flash, redirect, url_for
 from app import app, db
 from app.forms import LoginForm
 
-from flask_login import current_user, login_user
+from flask_login import current_user, login_user, logout_user
 from app.models import User
 import sqlalchemy as sa
 
@@ -65,4 +65,5 @@ def login():
 
 @app.route('/logout')
 def logout():
-    pass
+    logout_user()
+    redirect(url_for('index'))
