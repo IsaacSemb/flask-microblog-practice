@@ -1,6 +1,7 @@
+from datetime import datetime, timezone
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, request, url_for
-from app import app, db
+from app import app, db, login_manager
 from app.forms import LoginForm, RegistrationForm
 
 from flask_login import current_user, login_required, login_user, logout_user
@@ -8,10 +9,17 @@ from app.models import User
 import sqlalchemy as sa
 
 
+
+
+# this is used to get the context of the user
+@login_manager.user_loader
+def load_user(id):
+    return db.session.get(User, int(id))
+
+
 # to protect a view from people who arent logged in 
 # you use the login required decorator
 #  @login_required below the route decorator
-
 @app.route('/')
 @app.route('/index')
 @login_required
@@ -131,3 +139,11 @@ def user(username):
     ]
     
     return render_template( 'user.html', user=user, posts=sample_posts )
+
+# to be done before every request
+@app.before_request
+def before_request():
+    if current_user.is_authenticated:
+        current_user.last_seen = datetime.now(timezone.utc)
+        db.session.commit()
+

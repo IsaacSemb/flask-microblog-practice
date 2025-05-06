@@ -5,13 +5,8 @@ import sqlalchemy.orm as so
 from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-from app import login_manager
 from hashlib import md5
 
-
-@login_manager.user_loader
-def load_user(id):
-    return db.session.get(User, int(id))
 
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
