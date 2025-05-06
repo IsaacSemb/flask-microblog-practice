@@ -119,4 +119,15 @@ def logout():
 @app.route('/user/<username>')
 @login_required
 def user(username):
-    return render_template('user.html')
+    # get user object or 404 not found
+    user = db.first_or_404( sa
+                            .select(User)
+                            .where(User.username==username)
+                            )
+    
+    sample_posts = [
+        {'author':user, 'body':'test post #1'},
+        {'author':user, 'body':'test post #2'}
+    ]
+    
+    return render_template( 'user.html', user=user, posts=sample_posts )
