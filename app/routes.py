@@ -147,3 +147,7 @@ def before_request():
         current_user.last_seen = datetime.now(timezone.utc)
         db.session.commit()
 
+@app.route('/edit_profile', methods=['GET','POST'])
+@login_required
+def edit_profile():
+    pass
