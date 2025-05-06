@@ -6,6 +6,8 @@ from app import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from app import login_manager
+from hashlib import md5
+
 
 @login_manager.user_loader
 def load_user(id):
@@ -28,6 +30,14 @@ class User(db.Model, UserMixin):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
     
+    def avatar(self,size):
+        digest = md5(
+            self.email
+            .lower()
+            .encode('utf-8')
+            ).hexdigest()
+        return f"https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}"
+    
 class Post(db.Model):
     id : so.Mapped[int] = so.mapped_column(primary_key=True)
     body : so.Mapped[str] = so.mapped_column(sa.String(140))
@@ -38,4 +48,4 @@ class Post(db.Model):
     
     def __repr__(self):
         return f"<Post {self.body}>"
-    
+
