@@ -1,7 +1,7 @@
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, request, url_for
 from app import app, db
-from app.forms import LoginForm
+from app.forms import LoginForm, RegistrationForm
 
 from flask_login import current_user, login_required, login_user, logout_user
 from app.models import User
@@ -29,6 +29,13 @@ def index():
     ]
     
     return render_template( 'index.html', title='Home Page', posts=posts )
+
+
+@app.route('/register', methods=[ 'GET', 'POST' ])
+def register():
+    register_form = RegistrationForm()
+    return render_template( 'register.html', title='Register', form = register_form)
+
 
 @app.route('/login', methods=[ 'GET', 'POST' ])
 def login():
