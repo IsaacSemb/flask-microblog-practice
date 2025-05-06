@@ -17,6 +17,7 @@ import sqlalchemy as sa
 @login_required
 def index():
     
+    
     posts = [
         {
             'author': {'username': 'John'},
@@ -33,7 +34,36 @@ def index():
 
 @app.route('/register', methods=[ 'GET', 'POST' ])
 def register():
+    
+    # if user is already authenticated
+    if current_user.is_authenticated:
+        return redirect(url_for('index'))
+    
+    # pullin the registration form from forms    
     register_form = RegistrationForm()
+    
+    if register_form.validate_on_submit():
+        
+        # if valid, create the user
+        user = User(
+            username=register_form.username.data,
+            email=register_form.email.data            
+            )
+        
+        # set the user password
+        user.set_password(register_form.password.data)
+        
+        # add user to the db and commit them
+        db.session.add(user)
+        db.session.commit()
+        
+        # send notification to the front end
+        flash('Successfully registered')
+        
+        # send them to login page
+        return redirect(url_for('index'))
+    
+    # if something goes wrong re render the register page
     return render_template( 'register.html', title='Register', form = register_form)
 
 
