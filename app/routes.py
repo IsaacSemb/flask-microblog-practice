@@ -17,7 +17,6 @@ import sqlalchemy as sa
 @login_required
 def index():
     
-    
     posts = [
         {
             'author': {'username': 'John'},
@@ -111,3 +110,13 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+# User profile view
+
+
+
+@app.route('/user/<username>')
+@login_required
+def user(username):
+    return render_template('user.html')
