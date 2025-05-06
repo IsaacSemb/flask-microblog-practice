@@ -15,23 +15,7 @@
 <hr>
 
 {% for post in posts  %}
-
-
-
-<table>
-    <tr valign="top">
-        <td>
-            <img src="{{ post.author.avatar(36) }}" alt="">
-        </td>
-        <td>
-            <p>
-                {{post.author.username}} says: <b> {{ post.body }} </b>
-            </p>
-        </td>
-    </tr>
-</table>
-
-
+    {% include "_post.html" %}
 {% endfor %}
 
 {% endblock %}

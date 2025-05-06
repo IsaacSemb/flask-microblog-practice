@@ -1,0 +1,20 @@
+
+<!--
+This is a subtemplate that dictates the layout of a user's post. 
+Whenever you want to display a post, you can pull this template.
+-->
+
+
+
+
+<table>
+    <tr valign="top">
+        <td>
+            <img src="{{ post.author.avatar(36) }}" alt="">
+        </td>
+        <td>
+            {{post.author.username}} says: <br> 
+            {{ post.body }}
+        </td>
+    </tr>
+</table>
