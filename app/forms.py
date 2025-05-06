@@ -15,13 +15,26 @@ class LoginForm(FlaskForm):
 # registration form for application
 
 class RegistrationForm(FlaskForm):
-    username = StringField('Username', validators=[validators.DataRequired('Username is missing!')])
-    email = StringField('Email', validators=[validators.DataRequired('Email is missing'), validators.Email()])
-    password = PasswordField('Password', validators=[validators.DataRequired('Password is required')])
+    username = StringField(
+        label = 'Username', 
+        validators = [validators.DataRequired('Username is missing!')]
+        )
+    
+    email = StringField(
+        label = 'Email', 
+        validators = [validators.DataRequired('Email is missing'), validators.Email()]
+        )
+    
+    password = PasswordField(
+        label = 'Password', 
+        validators = [validators.DataRequired('Password is required')]
+        )
+    
     password_confirm = PasswordField(
-        label='Confirm Password',
-        validators=[validators.DataRequired(), validators.EqualTo('password')]
+        label = 'Confirm Password',
+        validators = [validators.DataRequired(), validators.EqualTo('password')]
     )
+    
     submit = SubmitField('Sign Up')
     
     # check that usename is not taken
