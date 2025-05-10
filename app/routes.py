@@ -150,7 +150,7 @@ def before_request():
 @login_required
 def edit_profile():
     # present the form
-    edit_form = EditProfileForm()
+    edit_form = EditProfileForm(current_user.username)
     
     # validate form
     if edit_form.validate_on_submit():
