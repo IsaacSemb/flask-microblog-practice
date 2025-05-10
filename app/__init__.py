@@ -19,4 +19,4 @@ login_manager = LoginManager(app)
 # the name is the name of the view function
 login_manager.login_view = 'login' 
 
-from app import routes, models
+from app import routes, models, errors
