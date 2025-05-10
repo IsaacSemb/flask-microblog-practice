@@ -61,4 +61,4 @@ class RegistrationForm(FlaskForm):
 class EditProfileForm(FlaskForm):
     username = StringField('username', validators=[validators.DataRequired()])
     about_me = TextAreaField('About Me', validators=[validators.Length(min=0, max=140)])
-    submit = SubmitField()
+    submit = SubmitField("Submit")

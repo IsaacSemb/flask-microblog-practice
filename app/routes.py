@@ -2,12 +2,11 @@ from datetime import datetime, timezone
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, request, url_for
 from app import app, db, login_manager
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, EditProfileForm
 
 from flask_login import current_user, login_required, login_user, logout_user
 from app.models import User
 import sqlalchemy as sa
-
 
 
 
@@ -150,4 +149,20 @@ def before_request():
 @app.route('/edit_profile', methods=['GET','POST'])
 @login_required
 def edit_profile():
-    pass
+    # present the form
+    edit_form = EditProfileForm()
+    
+    # validate form
+    if edit_form.validate_on_submit():
+        current_user.username = edit_form.username.data
+        current_user.about_me = edit_form.about_me.data
+        db.session.commit()
+        flash("Your changed have been saved")
+        return redirect( url_for('index') )
+        
+    elif request.method == 'GET':
+        edit_form.username.data = current_user.username 
+        edit_form.about_me.data = current_user.about_me
+        
+
+    return render_template( 'edit_profile.html', form=edit_form, title="Edit Profile" )
