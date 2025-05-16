@@ -61,6 +61,55 @@ class User(db.Model, UserMixin):
         back_populates = 'following'
     )
     
+    # ---------- FOLLOWING FUNCTIONALITY-----------
+    
+    def is_following(self, user:'User') -> bool :
+        """
+        Check if user is following another user
+        """
+        query = self.following.select().where(User.id == user.id)
+        return db.session.scalar(query) is not None
+    
+    def follow(self, user:'User') -> None :
+        """
+        Action for a user to follow another user
+        """
+        if not self.is_following(user):
+            self.following.add(user)
+    
+    def unfollow(self, user:'User') -> None :
+        """
+        Action for a user to unfollow another user
+        """
+        if self.is_following(user):
+            self.following.remove(user)
+    
+    def followers_count(self) -> Optional[int] :
+        """
+        Get the number of users who follow a user
+        """
+        query = (
+            sa.select(sa.func.count())
+            .select_from( 
+                self.followers.select().subquery()
+            )
+        )
+        return db.session.scalar(query)
+    
+    def following_count(self) -> Optional[int] :
+        """
+        Get the number of users a user is following
+        """
+        query = (
+            sa.select( sa.func.count() )
+            .select_from(
+            self.following.select().subquery()
+            )
+        )
+        return db.session.scalar(query)
+    
+    # ---------- FOLLOWING FUNCTIONALITY END-----------
+    
     
     def __repr__(self):
         return f"<User {self.username}>"
