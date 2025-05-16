@@ -7,6 +7,31 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from hashlib import md5
 
+followers = sa.Table(
+    # name of the table
+    "followers",
+    
+    # metadta of the table
+    db.metadata,
+    
+    # columns of the table or field
+    sa.Column( 'follower_id', sa.Integer, sa.ForeignKey('user.id'), primary_key=True  ),
+    sa.Column('followed_id', sa.Integer, sa.ForeignKey('user.id'), primary_key=True ),
+)
+notes = """
+
+this is not declared as a class like the users and the post models/tables
+It has no other asociated data other than the foreign keys of the user ids
+
+in this setting both as foreign keys will cause a
+compund primary key
+remember in DB classes -- two columns data treated as a key
+
+In esscence, the pair cant be duplicated
+A user can follow another user twice
+
+"""
+
 
 class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True)
@@ -18,7 +43,24 @@ class User(db.Model, UserMixin):
         default=lambda: datetime.now(timezone.utc)
     )
     
-    posts: so.WriteOnlyMapped['Post'] = so.relationship(back_populates='author')
+    posts: so.WriteOnlyMapped['Post'] = so.relationship( back_populates = 'author')
+    
+    # internal python representation of followers and following logic
+    
+    following: so.WriteOnlyMapped['User'] = so.relationship(
+        secondary = followers, 
+        primaryjoin = (followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        back_populates='followers'
+    )
+    
+    followers: so.WriteOnlyMapped['User'] = so.relationship(
+        secondary = followers,
+        primaryjoin = (followers.c.followed_id == id),
+        secondaryjoin = (followers.c.follower_id == id),
+        back_populates = 'following'
+    )
+    
     
     def __repr__(self):
         return f"<User {self.username}>"
