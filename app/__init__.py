@@ -20,16 +20,16 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
 # Initialise flask login (OVERRIDDEN THE LOGIN MANAGER TO CORRECT THE TYPE)
-class MyLoginManager(LoginManager):
-    login_view: Optional[str]
+# class MyLoginManager(LoginManager):
+#     login_view: Optional[str]
 
-login_manager = MyLoginManager(app)
+# login_manager = MyLoginManager(app)
 
-# login_manager = LoginManager(app)
+login_manager = LoginManager(app)
 
 # tell the login manager where the login view is found
 # the name is the name of the view function
-login_manager.login_view = 'login' 
+login_manager.login_view = 'login' # type: ignore
 
 # setting up the logger 
 if not app.debug: # if application is not in debug mode
