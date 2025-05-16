@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 from flask import Flask 
 
 
@@ -18,8 +19,13 @@ app.config.from_object(Config)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-# Initialise flask login
-login_manager = LoginManager(app)
+# Initialise flask login (OVERRIDDEN THE LOGIN MANAGER TO CORRECT THE TYPE)
+class MyLoginManager(LoginManager):
+    login_view: Optional[str]
+
+login_manager = MyLoginManager(app)
+
+# login_manager = LoginManager(app)
 
 # tell the login manager where the login view is found
 # the name is the name of the view function
