@@ -23,6 +23,11 @@ notes = """
 this is not declared as a class like the users and the post models/tables
 It has no other asociated data other than the foreign keys of the user ids
 
+Also from (pretty printed tutorial) 
+    We dont use model because 
+    we are probably not going to interact with that as a model
+    all its stuff and bindings is handled internally
+
 in this setting both as foreign keys will cause a
 compund primary key
 remember in DB classes -- two columns data treated as a key
