@@ -19,8 +19,28 @@
                 <p> Last Seen on : {{user.last_seen}}</p>
             {% endif %}
 
+
+            <!-- Show the follow count -->
+            <p>{{ user.followers_count() }} followers, {{ user.following_count() }} following.</p>
+
             {% if user==current_user  %}
                 <a href={{url_for('edit_profile')}}>Edit profile</a>
+            
+            <!-- implementation for if user is on another users page / perspective to prompt following or unfollowing -->
+            {% elif not current_user.is_following(user) %}
+                <p>
+                    <form action="{{ url_for('follow', username=user.username) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Follow') }}
+                    </form>
+                </p>
+            {% else %}
+                <p>
+                    <form action="{{ url_for('unfollow', username=user.username) }}" method="post">
+                        {{ form.hidden_tag() }}
+                        {{ form.submit(value='Unfollow') }}
+                    </form>
+                </p>
             {% endif %}
 
         </td>

@@ -132,13 +132,18 @@ def user(username):
                             .select(User)
                             .where(User.username==username)
                             )
-
+    # Get the following posts
     sample_posts = [
         {'author':user, 'body':'test post #1'},
         {'author':user, 'body':'test post #2'}
     ]
     
-    return render_template( 'user.html', user=user, posts=sample_posts )
+    # instantiate follow/unfollow form
+    form = EmptyForm()
+    
+    
+    
+    return render_template( 'user.html', user=user, posts=sample_posts, form=EmptyForm() )
 
 # to be done before every request
 @app.before_request

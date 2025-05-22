@@ -1,3 +1,4 @@
+# type:ignore
 from datetime import datetime, timezone
 from typing import Optional
 import sqlalchemy as sa
@@ -133,8 +134,7 @@ class User(db.Model, UserMixin):
             .group_by(Post) #type: ignore
             .order_by(Post.timestamp.desc())
         )
-               
-        
+                
         return query
     
     # ---------- FOLLOWING FUNCTIONALITY END-----------
