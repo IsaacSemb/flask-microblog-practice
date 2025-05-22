@@ -133,8 +133,7 @@ class User(db.Model, UserMixin):
             .group_by(Post) #type: ignore
             .order_by(Post.timestamp.desc())
         )
-        
-        print(query)
+               
         
         return query
     
