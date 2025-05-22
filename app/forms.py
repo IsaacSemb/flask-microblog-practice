@@ -79,4 +79,7 @@ class EditProfileForm(FlaskForm):
                 )
             if user is not None:
                 raise ValidationError('Please use a different username.')
-        
+            
+class EmptyForm(FlaskForm):
+    """this form is used for following and unfollowing purposes"""
+    submit = SubmitField(" Submit ")
