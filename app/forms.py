@@ -83,3 +83,13 @@ class EditProfileForm(FlaskForm):
 class EmptyForm(FlaskForm):
     """this form is used for following and unfollowing purposes"""
     submit = SubmitField(" Submit ")
+    
+class  PostForm(FlaskForm):
+    """This For is for the user to make a post on the home page"""
+    
+    post = TextAreaField(
+        'say something', 
+        validators=[ validators.DataRequired(), validators.Length(min=1, max=140) ]
+    )
+    submit = SubmitField('Submit')
+    

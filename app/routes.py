@@ -3,7 +3,15 @@ from datetime import datetime, timezone
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, request, url_for
 from app import app, db, login_manager
-from app.forms import LoginForm, RegistrationForm, EditProfileForm, EmptyForm
+
+from app.forms import (
+    LoginForm,
+    RegistrationForm,
+    EditProfileForm,
+    EmptyForm,
+    PostForm
+    )
+
 
 from flask_login import current_user, login_required, login_user, logout_user
 from app.models import User
@@ -25,6 +33,8 @@ def load_user(id):
 @login_required
 def index():
     
+    form = PostForm()
+    
     posts = [
         {
             'author': {'username': 'John'},
@@ -36,7 +46,7 @@ def index():
         }
     ]
     
-    return render_template( 'index.html', title='Home Page', posts=posts )
+    return render_template( 'index.html', title='Home Page', posts=posts, form=form )
 
 
 @app.route('/register', methods=[ 'GET', 'POST' ])
