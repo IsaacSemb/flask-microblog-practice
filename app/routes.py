@@ -14,7 +14,7 @@ from app.forms import (
 
 
 from flask_login import current_user, login_required, login_user, logout_user
-from app.models import User
+from app.models import User, Post
 import sqlalchemy as sa
 
 
@@ -28,23 +28,31 @@ def load_user(id):
 # to protect a view from people who arent logged in 
 # you use the login required decorator
 #  @login_required below the route decorator
-@app.route('/')
-@app.route('/index')
+@app.route('/', methods=['GET','POST'])
+@app.route('/index', methods=['GET','POST'])
 @login_required
 def index():
+    """ 
+    This is the home page to the application  
+    It displays current state of the users and latest posts
+    """
     
+    # form for making a post
     form = PostForm()
     
-    posts = [
-        {
-            'author': {'username': 'John'},
-            'body': 'Beautiful day in Portland!'
-        },
-        {
-            'author': {'username': 'Susan'},
-            'body': 'The Avengers movie was so cool!'
-        }
-    ]
+    if form.validate_on_submit():
+        post = Post( 
+                    body = form.post.data,
+                    author = current_user
+                    )
+        db.session.add(post)
+        db.session.commit()
+        flash("Your Post is now live!")
+        return redirect(url_for('index'))
+        
+    
+    posts = db.session.scalars(current_user.following_posts()).all()
+    
     
     return render_template( 'index.html', title='Home Page', posts=posts, form=form )
 
