@@ -5,26 +5,30 @@
   
   <h1>Hello, {{ current_user.username }}!</h1>
 
-  <form action="" method="post">
+  {% if form %}
 
-    {{ form.hidden_tag() }}
+    <form action="" method="post">
 
-    <p>
-      
-      {{ form.post.label }} <br>
-      {{ form.post(cols=32, rows=4) }}<br>
+      {{ form.hidden_tag() }}
 
-      {% for error in form.post.errors %}
-        <span style="color:red;">
-          [ {{ error }} ]
-        </span>
-      {% endfor %}
+      <p>
+        
+        {{ form.post.label }} <br>
+        {{ form.post(cols=32, rows=4) }}<br>
 
-    </p>
+        {% for error in form.post.errors %}
+          <span style="color:red;">
+            [ {{ error }} ]
+          </span>
+        {% endfor %}
 
-    <p> {{ form.submit() }} </p>
+      </p>
 
-  </form>
+      <p> {{ form.submit() }} </p>
+
+    </form>
+
+  {% endif %}
 
 
   {% for post in posts %}
