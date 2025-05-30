@@ -40,6 +40,7 @@ def index():
     # form for making a post
     form = PostForm()
     
+    # processing of the form data
     if form.validate_on_submit():
         post = Post( 
                     body = form.post.data,
@@ -242,3 +243,26 @@ def unfollow(username):
         return redirect(url_for('user', username = username ))
     else:
         return redirect(url_for('index'))
+
+@app.route('/explore')
+@login_required
+def explore():
+    """
+    This view return a stream of all posts from users in the system
+    so that the current user can see them and follow them etc
+    """
+    # select all posts in the system and order them by newest
+    query = (
+        sa
+        .select(Post)
+        .order_by(Post.timestamp.desc())
+    )
+    posts = db.session.scalars(query).all()
+    
+    # this reuses the index template since they some what serve a similar purpose
+    # the only difference is here we dont serve a post form for posting stuff
+    return render_template( 'index.html', title='Explore', posts=posts )
+    
+    
+    
+    

@@ -3,3 +3,4 @@ __pycache__
 *.pyc
 logs
 .flaskenv
+last_stop.txt
