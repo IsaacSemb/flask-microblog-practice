@@ -16,7 +16,7 @@ from app.forms import (
 from flask_login import current_user, login_required, login_user, logout_user
 from app.models import User, Post
 import sqlalchemy as sa
-
+from sqlalchemy import func
 
 
 # this is used to get the context of the user
@@ -238,6 +238,13 @@ def user(username):
         error_out=False
     )
     
+    # get a count of all users posts
+    user_post_count = (
+                    db.session
+                    .query(func.count(Post.id))
+                    .filter(Post.user_id == user.id)
+                    .scalar()                    
+                    )
     
     # Compute if there are next and previous pages url
     # so that we can pass them down too
@@ -255,7 +262,8 @@ def user(username):
                         posts=posts.items,
                         form=form,
                         prev_url=prev_url,
-                        next_url=next_url
+                        next_url=next_url,
+                        user_post_count=user_post_count
                         )
 
 # to be done before every request
