@@ -65,7 +65,22 @@ def index():
                         per_page=app.config['POSTS_PER_PAGE'],
                         error_out=False                    
                     )
-    return render_template( 'index.html', title='Home Page', posts=posts.items, form=form )
+    
+    # Compute if there are next and previous pages url
+    # so that we can pass them down too
+    
+    next_url = url_for('index', page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
+    
+    
+    return render_template( 
+                            'index.html',
+                            title='Home Page',
+                            posts=posts.items,
+                            form=form,
+                            next_url = next_url,
+                            prev_url = prev_url
+                        )
 
 
 @app.route('/explore')
@@ -93,9 +108,21 @@ def explore():
         error_out=False
     )
     
+    # Compute if there are next and previous pages url
+    # so that we can pass them down too
+    
+    next_url = url_for('index', page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('index', page=posts.prev_num) if posts.has_prev else None
+    
     # this reuses the index template since they some what serve a similar purpose
     # the only difference is here we dont serve a post form for posting stuff
-    return render_template( 'index.html', title='Explore', posts=posts.items )
+    return render_template( 
+                            'index.html',
+                            title='Explore',
+                            posts=posts.items,
+                            next_url = next_url,
+                            prev_url = prev_url
+                            )
 
 
 
