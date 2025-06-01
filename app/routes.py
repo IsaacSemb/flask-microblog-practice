@@ -219,18 +219,44 @@ def user(username):
                             .select(User)
                             .where(User.username==username)
                             )
-    # Get the following posts
-    sample_posts = [
-        {'author':user, 'body':'test post #1'},
-        {'author':user, 'body':'test post #2'}
-    ]
+    
+    # implement pagination
+    page = request.args.get('page', 1, type='int')
+    
+    # get all users posts 
+    query = (user
+            .posts
+            .select()
+            .order_by(Post.timestamp.desc())
+            )
+        
+    # Get the post from this user and display the mto the user
+    posts = db.paginate(
+        query,
+        page=page,
+        per_page=app.config['POSTS_PER_PAGE'],
+        error_out=False
+    )
+    
+    
+    # Compute if there are next and previous pages url
+    # so that we can pass them down too
+    
+    next_url = url_for('user',username=user.username, page=posts.next_num) if posts.has_next else None
+    prev_url = url_for('user',username=user.username, page=posts.prev_num) if posts.has_prev else None
+
     
     # instantiate follow/unfollow form
     form = EmptyForm()
     
-    
-    
-    return render_template( 'user.html', user=user, posts=sample_posts, form=EmptyForm() )
+    return render_template( 
+                        'user.html',
+                        user=user,
+                        posts=posts.items,
+                        form=form,
+                        prev_url=prev_url,
+                        next_url=next_url
+                        )
 
 # to be done before every request
 @app.before_request
