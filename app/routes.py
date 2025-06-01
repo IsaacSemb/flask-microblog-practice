@@ -221,7 +221,7 @@ def user(username):
                             )
     
     # implement pagination
-    page = request.args.get('page', 1, type='int')
+    page = request.args.get('page', 1, type=int)
     
     # get all users posts 
     query = (user
@@ -229,14 +229,16 @@ def user(username):
             .select()
             .order_by(Post.timestamp.desc())
             )
-        
+    
     # Get the post from this user and display the mto the user
     posts = db.paginate(
         query,
-        page=page,
-        per_page=app.config['POSTS_PER_PAGE'],
-        error_out=False
+        page= page,
+        per_page= app.config['POSTS_PER_PAGE'],
+        error_out= False
     )
+    
+    # TODO: The pagination isnt working as intended
     
     # get a count of all users posts
     user_post_count = (
@@ -251,10 +253,26 @@ def user(username):
     
     next_url = url_for('user',username=user.username, page=posts.next_num) if posts.has_next else None
     prev_url = url_for('user',username=user.username, page=posts.prev_num) if posts.has_prev else None
-
     
     # instantiate follow/unfollow form
     form = EmptyForm()
+    
+    
+    print()
+    print("Page from variable:", page)
+    print("Page( posts.page ):", posts.page)
+    print("Per Page( posts.per_page ):", posts.per_page)
+    print("Total Pages( posts.pages ):", posts.pages)
+    print("Total Items( posts.total ):", posts.total)
+    print("Has Next( posts.has_next ):", posts.has_next)
+    print("Has Prev( posts.has_prev ):", posts.has_prev)
+    print("Prev Page( prev_url ):", prev_url)
+    print("Next Page( next_url ):", next_url)
+    print("Items Returned( posts.items ):", len(posts.items))
+    print()
+
+    
+    
     
     return render_template( 
                         'user.html',

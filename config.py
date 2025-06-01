@@ -11,7 +11,7 @@ class Config:
         'sqlite:///' + os.path.join(basedir, 'app.db')
         
     # Setting up pagination
-    POSTS_PER_PAGE = 5
+    POSTS_PER_PAGE = 10
     
     # configuring email for errors
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
