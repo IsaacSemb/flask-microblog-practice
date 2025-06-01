@@ -9,6 +9,9 @@ class Config:
     # database configuration
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATATBASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'app.db')
+        
+    # Setting up pagination
+    POSTS_PER_PAGE = 5
     
     # configuring email for errors
     MAIL_SERVER = os.environ.get('MAIL_SERVER')

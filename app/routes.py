@@ -50,12 +50,53 @@ def index():
         db.session.commit()
         flash("Your Post is now live!")
         return redirect(url_for('index'))
-        
     
-    posts = db.session.scalars(current_user.following_posts()).all()
+    # implement pagination
+    page = request.args.get('page',1, type=int)
     
     
-    return render_template( 'index.html', title='Home Page', posts=posts, form=form )
+    # original
+    # posts = db.session.scalars(current_user.following_posts()).all()
+    
+    # paginated
+    posts = db.paginate( 
+                        current_user.following_posts(),
+                        page=page,
+                        per_page=app.config['POSTS_PER_PAGE'],
+                        error_out=False                    
+                    )
+    return render_template( 'index.html', title='Home Page', posts=posts.items, form=form )
+
+
+@app.route('/explore')
+@login_required
+def explore():
+    """
+    This view return a stream of all posts from users in the system
+    so that the current user can see them and follow them etc
+    """
+    
+    # implement pagination
+    page = request.args.get('page',1, type=int)
+    
+    
+    # select all posts in the system and order them by newest
+    query = (
+        sa
+        .select(Post)
+        .order_by(Post.timestamp.desc())
+    )
+    posts = db.paginate(
+        query,
+        page=page,
+        per_page=app.config['POSTS_PER_PAGE'],
+        error_out=False
+    )
+    
+    # this reuses the index template since they some what serve a similar purpose
+    # the only difference is here we dont serve a post form for posting stuff
+    return render_template( 'index.html', title='Explore', posts=posts.items )
+
 
 
 @app.route('/register', methods=[ 'GET', 'POST' ])
@@ -244,24 +285,7 @@ def unfollow(username):
     else:
         return redirect(url_for('index'))
 
-@app.route('/explore')
-@login_required
-def explore():
-    """
-    This view return a stream of all posts from users in the system
-    so that the current user can see them and follow them etc
-    """
-    # select all posts in the system and order them by newest
-    query = (
-        sa
-        .select(Post)
-        .order_by(Post.timestamp.desc())
-    )
-    posts = db.session.scalars(query).all()
-    
-    # this reuses the index template since they some what serve a similar purpose
-    # the only difference is here we dont serve a post form for posting stuff
-    return render_template( 'index.html', title='Explore', posts=posts )
+
     
     
     

@@ -4,3 +4,4 @@ __pycache__
 logs
 .flaskenv
 last_stop.txt
+db_backup.sql
